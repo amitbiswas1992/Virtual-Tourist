@@ -1,0 +1,44 @@
+
+1. flickr.photos.search
+
+https://www.flickr.com/services/api/flickr.photos.search.html
+
+<photos page="2" pages="89" perpage="10" total="881">
+    <photo id="2636" owner="47058503995@N01"
+        secret="a123456" server="2" title="test_04"
+        ispublic="1" isfriend="0" isfamily="0" />
+    <photo id="2635" owner="47058503995@N01"
+        secret="b123456" server="2" title="test_03"
+        ispublic="0" isfriend="1" isfamily="1" />
+    <photo id="2633" owner="47058503995@N01"
+        secret="c123456" server="2" title="test_01"
+        ispublic="1" isfriend="0" isfamily="0" />
+    <photo id="2610" owner="12037949754@N01"
+        secret="d123456" server="2" title="00_tall"
+        ispublic="1" isfriend="0" isfamily="0" />
+</photos>
+
+
+2. garbage
+
+fileprivate func setUpFetchedResultsController() {
+   let fetchRequest:NSFetchRequest<Pin> = Pin.fetchRequest()
+   let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
+   fetchRequest.sortDescriptors = [sortDescriptor]
+ 
+   fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: "pins")
+   fetchedResultsController.delegate = self
+
+    if let pins = fetchedResultsController.fetchedObjects {
+       for pin in pins  {
+            let coordinate = CLLocationCoordinate2D(latitude: pin.latitude, longitude: pin.longitude)
+            let annotation = AnnotationPin(pin: pin)
+            annotation.coordinate = coordinate
+            annotation.title = pin.locationName
+            annotation.subtitle = pin.country
+            DispatchQueue.main.async {
+            self.mapView.addAnnotation(annotation)
+        }
+      }
+    }
+}
